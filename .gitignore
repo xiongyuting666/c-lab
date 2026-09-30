@@ -1,0 +1,54 @@
+# 目标文件
+*.o
+*.obj
+*.ko
+*.elf
+
+# 预编译头
+*.gch
+*.pch
+
+# 静态库
+*.a
+*.lib
+*.la
+*.lo
+
+# 动态库
+*.so
+*.so.*
+*.dll
+*.dylib
+
+# 可执行文件
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# 调试信息
+*.pdb
+*.ilk
+*.dSYM/
+*.su
+*.idb
+
+# 依赖文件
+*.d
+
+# 构建目录
+build/
+Debug/
+Release/
+bin/
+obj/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+
+# 系统文件
+.DS_Store
+Thumbs.db
