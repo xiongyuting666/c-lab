@@ -38,6 +38,61 @@
 # 依赖文件
 *.d
 
+# Python 字节码与缓存
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+
+# Python 打包/分发产物
+*.egg-info/
+*.egg
+.eggs/
+dist/
+sdist/
+wheels/
+*.whl
+pip-wheel-metadata/
+build/bdist.*/
+build/lib*/
+MANIFEST
+
+# Python 构建/编译产物
+*.manifest
+*.spec
+
+# Python 测试与覆盖率
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+nosetests.xml
+coverage.csv
+
+# Python 虚拟环境
+.venv/
+venv/
+env/
+ENV/
+.python-version
+
+# Python 类型检查/工具缓存
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.ruff_cache/
+.pytype/
+.pyre/
+.pyright/
+Pipfile.lock
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
 # 构建目录
 build/
 Debug/
