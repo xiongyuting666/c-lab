@@ -45,6 +45,9 @@ def Deposit(money: int)->bool:
     if(not userOnline):
             Log("存款失败：当前无用户登录")
             return False
+    if(money <= 0):
+        Log(f"存款失败：存款金额 {money} 无效，必须大于 0")
+        return False
     global currentUser
     currentUser.money += money
     Log(f"存款成功：用户 {currentUser.userName} 存入 {money} 元，当前余额为 {currentUser.money} 元", TSN=True)
