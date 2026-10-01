@@ -2,7 +2,7 @@ import ATM_module
 
 
 # 主菜单：显示操作选项，读取用户选择
-def printMenu() -> int:
+def PrintMenu() -> int:
     print("--------------------------------")
     print("***    您好，欢迎来到银行ATM，请选择操作：")
     print("查询余额  【输入1】")
@@ -19,10 +19,10 @@ def printMenu() -> int:
 
 # 读取金额
 # 这里只负责把输入转成数字，具体金额是否合法交给各个功能函数自己判断
-def readMoney(prompt: str) -> int:
+def ReadMoney(prompt: str) -> int:
     text = input(prompt)
     try:
-        money = float(text)
+        money = int(text)
     except ValueError:
         print("输入无效，请输入正确的金额")
         return -1
@@ -30,28 +30,28 @@ def readMoney(prompt: str) -> int:
 
 
 # 查询余额
-def doCheckBalance():
-    ATM_module.checkBalance()
+def DoCheckBalance():
+    ATM_module.CheckBalance()
 
 
 # 存款
-def doDeposit():
-    money = readMoney("请输入存款金额：")
+def DoDeposit():
+    money = ReadMoney("请输入存款金额：")
     if money < 0:
         return
-    ATM_module.deposit(money)
+    ATM_module.Deposit(money)
 
 
 # 取款
-def doWithdraw():
-    money = readMoney("请输入取款金额：")
+def DoWithdraw():
+    money = ReadMoney("请输入取款金额：")
     if money < 0:
         return
-    ATM_module.withdrawCash(money)
+    ATM_module.WithdrawCash(money)
 
 
 # 主流程
-def main():
+def Main():
     # 初始金额 5000，无需密码
     userA = ATM_module.User("userA", 5000)
     ATM_module.EnterSystem(userA)
@@ -60,13 +60,13 @@ def main():
 
     # 菜单循环
     while True:
-        choice = printMenu()
+        choice = PrintMenu()
         if choice == 1:
-            doCheckBalance()
+            DoCheckBalance()
         elif choice == 2:
-            doDeposit()
+            DoDeposit()
         elif choice == 3:
-            doWithdraw()
+            DoWithdraw()
         elif choice == 4:
             ATM_module.ExitSystem()
             print("感谢使用，再见！")
@@ -78,6 +78,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    Main()
 
 
