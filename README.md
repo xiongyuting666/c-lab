@@ -4,14 +4,22 @@
 
 ## 目录说明
 
-- `test.c`：第一个测试程序，输出 `Hello git`
+包含每个人的作业
+尽量在自己的文件夹下尝试，不然要处理合并冲突
+如果想改别人的代码走流程：
 
-## 编译运行
+1. 先 `git pull` 拉取最新代码，保证本地是最新的
+2. 从 master 切一个新分支，名字带上自己的名字和要改的内容，比如 `git checkout -b yangyi/fix-testc`
+3. 在分支上改代码、提交（提交信息按下面的前缀规范写）
+4. 推送到远程：`git push origin yangyi/fix-testc`
+5. 在 GitHub 上发起 Pull Request，请代码的主人（或者组里其他人）看一眼
+6. 对方 review 通过后合并到 master，然后删掉这个临时分支
 
-```bash
-gcc test.c -o test
-./test
-```
+简单说就是：**别直接在 master 上改别人的代码，开分支 → 改 → PR → 等人 review → 合并。**
+
+比较麻烦可以自己摸索
+
+鼓励多尝试各种git操作
 
 ## 协作约定
 
