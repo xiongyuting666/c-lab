@@ -6,7 +6,7 @@
 
 配套阅读：[README.md](./README.md) 里的提交信息前缀表和目录约定。
 
-> **写在前面**：[README.md](./README.md) 里对直接推 `master` 还比较宽松（"想直接推就直接推吧，多尝试"），本文写的是**目标流程**。等大家都跑通一遍之后，建议把 README 的措辞收紧，并按[第七节](#七把约定变成机制推荐)打开分支保护，让规则从"靠自觉"变成"点不动"。
+> **写在前面**：[README.md](./README.md) 里对直接推 `master` 还比较宽松（"想直接推就直接推吧，多尝试"），本文写的是**目标流程**。等大家都跑通一遍之后，会把 README 的措辞收紧，并按[第七节](#七把约定变成机制推荐)打开分支保护，让规则从"靠自觉"变成"点不动"。
 
 ---
 
@@ -15,9 +15,9 @@
 ```bash
 git switch master && git pull          # 1. 同步
 git switch -c 你的名字/改什么           # 2. 开分支
-# 3. 改代码
+# 3. 改代码（正常提交）
 git add <文件> && git commit -m "fix: 描述"
-git push -u origin 你的名字/改什么      # 4. 推分支（不是 master！）
+git push -u origin 你的名字/改什么      # 4. 推分支（不是 master！只推支线，不要自己合并）
 # 5. 去 GitHub 上点 Compare & pull request
 # 6. 等别人 review 后，由对方点 Merge
 ```
@@ -39,19 +39,37 @@ git push -u origin 你的名字/改什么      # 4. 推分支（不是 master！
 ### 哪些操作算"直接推 master"（禁止）
 
 ```bash
-git switch master
-git merge 你的分支
-git push                      # ← 这一下就等于绕过 PR 直接改 master
+git switch master + git merge 你的分支
+git switch master + git push
 ```
+
+**注意：出问题的是这个组合，不是 `git push` 这个命令本身。** `git push` 不带参数的含义是"把**当前所在分支**推到它的上游"——只要你在自己的分支上，`git push` 只更新那条分支，`master` 一点没动。危险来自前面那句 `git switch master`，让你站到了 master 上。
+
+真正要无条件避开的是下面这种**显式指定 master** 的写法，它在任何分支上执行都会生效：
+
+```bash
+git push origin master          # ← 无论当前在哪条分支，都直接写进 master
+git push origin HEAD:master     # ← 同上，更隐蔽
+```
+
+推之前自查一句 `git branch --show-current`，只要输出不是 `master` 就没问题。想更保险就显式写目标分支：`git push origin 你的分支名`。
 
 ### 哪些操作是合法的
 
+在**自己的分支**上，把 master 的最新内容合进来：
+
 ```bash
-git switch master
-git merge origin/master       # 站在自己的分支上把 master 合进来，方向相反，安全
+git switch yangyi/fix-testc   # 先站回自己的分支
+git fetch origin              # 刷新 origin/master 这个本地快照
+git merge origin/master       # 把 master 合进来，方向相反，安全
 ```
 
-同一句 `git merge`，**站在哪条分支上跑，方向完全相反**。记住：`git merge A` = 把 A 合进"我当前所在的分支"，A 本身不动。
+这个操作只会让你的分支前进，`master` 本身纹丝不动。
+
+同一句 `git merge`，**站在哪条分支上跑，方向完全相反**。记住：`git merge A` = 把 A 合进"我当前所在的分支"，A 本身不动。所以：
+
+- 站在 `yangyi/fix-testc` 上 `git merge origin/master` → 把 master 合进来 ✅
+- 站在 `master` 上 `git merge yangyi/fix-testc` → 把你的改动合进 master ❌
 
 ---
 
@@ -60,9 +78,9 @@ git merge origin/master       # 站在自己的分支上把 master 合进来，�
 ### 1. 同步并开分支
 
 ```bash
-git switch master
-git pull
-git switch -c yangyi/fix-testc
+git switch master # 先到主分支
+git pull # 拉取最新改动
+git switch -c yangyi/fix-testc # 创造自己的分支
 ```
 
 分支命名建议 `你的名字/改什么`，**尽量用英文和连字符**（如 `yangyi/py-naming-doc`）。中文分支名能用，但在命令行要加引号，在 URL 里会变成一长串 `%E5%...`，容易出错。
@@ -100,17 +118,6 @@ git push -u origin yangyi/fix-testc
 
 **谁能点 Merge？** 见 [第六节](#六谁能点-merge)。
 
-### 6. 收尾
-
-合并后（远程分支一般会被一起删掉）：
-
-```bash
-git switch master
-git pull
-git branch -d yangyi/fix-testc     # 删掉本地分支
-git fetch --prune                  # 清掉远程已删除分支的追踪记录
-```
-
 ---
 
 ## 四、常见情况
@@ -125,6 +132,7 @@ git fetch --prune                  # 清掉远程已删除分支的追踪记录
 | **完全不相干的新功能** | 从最新 `master` 开新分支，两个 PR 各审各合 |
 | **新东西依赖还没合并的改动** | 从当前分支再开分支，开 PR 时 `base` 选**旧的功能分支**而不是 master |
 
+第三种可以先忽略不管
 第三种叫 stacked PR，等底层那个合并后 base 会自动切到 master，但对小仓库来说不如"先合前者再开发后者"简单。
 
 ### 情况 2：master 有新提交，我的分支落后了
