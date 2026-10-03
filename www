@@ -1,0 +1,41 @@
+dist_log = [56, 22, 8, 91, 44, 15, 77, -5]
+
+danger_count = 0
+near_count = 0
+safe_count = 0
+valid_count = 0
+error_count = 0
+
+sum_distance = 0
+
+for dist in dist_log:
+    print(f"当前检测距离：{dist} cm，数据类型：{type(dist)}")
+    if dist < 0:
+        error_count += 1
+        print("====>传感器数据异常，跳过该条数据\n")
+        continue
+    valid_count += 1
+    sum_distance += dist
+    if 0 <= dist <= 10:
+        danger_count += 1
+        status = "危险预警（紧急避让）"
+    elif 11 <= dist <= 30:
+        near_count += 1
+        status = "近距离（谨慎行驶）"
+    else:
+        safe_count += 1
+        status = "安全距离（正常运行）"
+    print(f"====>状态描述：{status}\n")
+
+if valid_count > 0:
+    avg_dist = sum_distance / valid_count
+else:
+    avg_dist = 0
+
+print("=====设备日志数据分析报告=====")
+print(f"危险数据次数: {danger_count} 次")
+print(f"近距离数据次数: {near_count} 次")
+print(f"安全数据次数: {safe_count} 次")
+print(f"有效数据总次数: {valid_count} 次")
+print(f"本次检测平均距离: {avg_dist:.2f} cm")
+print(f"异常数据条数: {error_count} 条")
